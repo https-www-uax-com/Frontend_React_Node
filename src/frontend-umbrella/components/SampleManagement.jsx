@@ -21,13 +21,32 @@ function SampleManagement() {
         fetchAllSamples();
     }, []);
 
-
+    // Fetch all samples from the server
     const fetchAllSamples = () => {
         sampleService.fetchSamples()
             .then((data) => setSamples(data))
             .catch((error) => console.error('Error fetching samples:', error));
     };
 
+    // Handle edit button for a sample
+    const handleEditSample = (id) => {
+        sampleService.fetchSampleById(id)
+            .then((data) => {
+                // Cargar los datos del sample en el formulario
+                setSampleForm({
+                    uspCategory: data.uspCategory,
+                    uspClass: data.uspClass,
+                    uspDrug: data.uspDrug,
+                    keggIdDrug: data.keggIdDrug,
+                    drugExample: data.drugExample,
+                    nomenclature: data.nomenclature
+                });
+                setEditingSampleId(id); // Guardar el ID que se está editando
+            })
+            .catch((error) => console.error('Error fetching sample:', error));
+    };
+
+    // Actualizar una muestra
     const updateSample = () => {
         if (editingSampleId) {
             sampleService.updateSample(editingSampleId, sampleForm)
@@ -40,18 +59,25 @@ function SampleManagement() {
                         drugExample: '',
                         nomenclature: ''
                     });
-                    setEditingSampleId(null);
-                    fetchAllSamples();
+                    setEditingSampleId(null); // Limpiar el estado de edición
+                    fetchAllSamples(); // Recargar todas las muestras
                 })
                 .catch((error) => console.error('Error updating sample:', error));
         }
     };
 
+    // Manejar el evento de envío del formulario de edición
+    const handleSubmit = (e) => {
+        e.preventDefault(); // Evitar que la página se recargue
+        updateSample(); // Llamar a la función de actualización
+    };
+
+    // Actualizar datos biológicos
     const updateBiologicalData = (bioData) => {
         biologicalDataService.updateBiologicalData(bioData.id, bioData)
             .then(() => {
                 alert(`Datos biológicos para la muestra ${bioData.id} actualizados`);
-                fetchAllSamples(); // Actualiza la lista tras la modificación
+                fetchAllSamples();
             })
             .catch((error) => console.error(`Error actualizando datos biológicos ${bioData.id}:`, error));
     };
@@ -73,10 +99,8 @@ function SampleManagement() {
         setEditingBiologicalData(bioData);
     };
 
-    // Paginación: Obtener muestras de la página actual
     const paginatedSamples = samples.slice(currentPage * samplesPerPage, (currentPage + 1) * samplesPerPage);
 
-    // Funciones de navegación de página
     const goToNextPage = () => {
         if ((currentPage + 1) * samplesPerPage < samples.length) {
             setCurrentPage(currentPage + 1);
@@ -93,6 +117,58 @@ function SampleManagement() {
         <div style={styles.container}>
             <h1 style={styles.title}>Gestión de Muestras</h1>
             <button style={styles.processButton} onClick={() => sampleService.processSamplesConcurrently()}>Procesar Todas las Muestras</button>
+
+            {/* Formulario de edición de muestra */}
+            {editingSampleId && (
+                <div style={styles.formContainer}>
+                    <h2 style={styles.formTitle}>Editar Muestra</h2>
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            placeholder="Categoría"
+                            value={sampleForm.uspCategory}
+                            onChange={(e) => setSampleForm({...sampleForm, uspCategory: e.target.value})}
+                            style={styles.input}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Clase"
+                            value={sampleForm.uspClass}
+                            onChange={(e) => setSampleForm({...sampleForm, uspClass: e.target.value})}
+                            style={styles.input}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Droga"
+                            value={sampleForm.uspDrug}
+                            onChange={(e) => setSampleForm({...sampleForm, uspDrug: e.target.value})}
+                            style={styles.input}
+                        />
+                        <input
+                            type="text"
+                            placeholder="KEGG ID"
+                            value={sampleForm.keggIdDrug}
+                            onChange={(e) => setSampleForm({...sampleForm, keggIdDrug: e.target.value})}
+                            style={styles.input}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Ejemplo de Droga"
+                            value={sampleForm.drugExample}
+                            onChange={(e) => setSampleForm({...sampleForm, drugExample: e.target.value})}
+                            style={styles.input}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Nomenclatura"
+                            value={sampleForm.nomenclature}
+                            onChange={(e) => setSampleForm({ ...sampleForm, nomenclature: e.target.value })}
+                            style={styles.input}
+                        />
+                        <button onClick={updateSample} style={styles.updateButton}>Actualizar Muestra</button>
+                    </form>
+                </div>
+            )}
 
             <div style={styles.cardContainer}>
                 {paginatedSamples.map((sample) => (
@@ -112,7 +188,7 @@ function SampleManagement() {
                                         <input
                                             type="text"
                                             name="sampleType"
-                                            value={editingBiologicalData.sampleType}
+                                            value={editingBiologicalData.sampleType || ""}
                                             onChange={handleBiologicalDataChange}
                                             style={styles.input}
                                             placeholder="Tipo de Muestra"
@@ -120,26 +196,17 @@ function SampleManagement() {
                                         <input
                                             type="text"
                                             name="data"
-                                            value={editingBiologicalData.data}
+                                            value={editingBiologicalData.data || ""}
                                             onChange={handleBiologicalDataChange}
                                             style={styles.input}
                                             placeholder="Datos"
-                                        />
-                                        <input
-                                            type="text"
-                                            name="analysisResult"
-                                            value={editingBiologicalData.analysisResult}
-                                            onChange={handleBiologicalDataChange}
-                                            style={styles.input}
-                                            placeholder="Resultado del análisis"
                                         />
                                         <button type="submit" style={styles.updateButton}>Actualizar Datos</button>
                                     </form>
                                 ) : (
                                     <>
-                                        <p style={styles.info}>Tipo de Muestra: {sample.biologicalData.sampleType}</p>
-                                        <p style={styles.info}>Datos: {sample.biologicalData.data}</p>
-                                        <p style={styles.info}>Resultado: {sample.biologicalData.analysisResult}</p>
+                                        <p style={styles.info}>Tipo de Muestra: {sample.biologicalData.sampleType || 'No disponible'}</p>
+                                        <p style={styles.info}>Datos: {sample.biologicalData.data || 'No disponible'}</p>
                                         <p style={styles.info}>Fecha: {new Date(sample.biologicalData.timestamp).toLocaleString()}</p>
                                         <button
                                             style={styles.editButton}
@@ -153,8 +220,8 @@ function SampleManagement() {
                         )}
 
                         <div style={styles.buttonGroup}>
-                            <button style={styles.buttonSecondary} onClick={() => sampleService.fetchSampleById(sample.id)}>Editar</button>
-                            <button style={styles.buttonDelete} onClick={() => sampleService.deleteSample(sample.id)}>Eliminar</button>
+                            <button style={styles.buttonSecondary} onClick={() => handleEditSample(sample.id)}>Editar</button>
+                            <button style={styles.buttonDelete} onClick={() => handleDeleteSample(sample.id)}>Eliminar</button>
                             <button style={styles.buttonSecondary} onClick={() => sampleService.processSingleSample(sample.id)}>Procesar</button>
                         </div>
                     </div>
@@ -201,13 +268,13 @@ const styles = {
         gap: '20px',
     },
     card: {
-        backgroundColor: '#f5f7fa',
+        border: '1px solid #ddd',
+        borderRadius: '8px',
         padding: '20px',
-        borderRadius: '12px',
+        marginBottom: '20px',
+        backgroundColor: '#fff',
+        color: '#2c3e50',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
     },
     subtitle: {
         fontSize: '20px',
@@ -230,13 +297,12 @@ const styles = {
         marginBottom: '10px',
     },
     input: {
-        padding: '8px',
-        fontSize: '14px',
-        borderRadius: '4px',
-        border: '1px solid #ccc',
-        marginBottom: '10px',
         display: 'block',
         width: '100%',
+        padding: '10px',
+        marginBottom: '10px',
+        borderRadius: '4px',
+        border: '1px solid #ccc',
     },
     buttonGroup: {
         display: 'flex',
@@ -261,12 +327,11 @@ const styles = {
         cursor: 'pointer',
     },
     updateButton: {
-        padding: '8px 12px',
-        fontSize: '14px',
+        padding: '10px 20px',
         backgroundColor: '#f39c12',
         color: '#fff',
         border: 'none',
-        borderRadius: '6px',
+        borderRadius: '4px',
         cursor: 'pointer',
         display: 'block',
         margin: '0 auto',
@@ -301,6 +366,20 @@ const styles = {
         margin: '0 10px',
         transition: 'background-color 0.3s',
     },
+    formContainer: {
+        backgroundColor: '#f9f9f9',
+        padding: '20px',
+        borderRadius: '8px',
+        marginBottom: '20px',
+        marginTop: '20px', // Añadir margen superior
+    },
+    formTitle: {
+        fontSize: '24px',
+        fontWeight: 'bold',
+        color: '#000',  // Cambia el color del texto a negro
+        marginBottom: '15px',
+    },
 };
 
 export default SampleManagement;
+

@@ -201,8 +201,8 @@ const styles = {
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     },
     form: {
-        marginTop: '30px',  // Incrementa el margen superior del formulario para más espacio
-        marginBottom: '30px', // Aumenta el margen inferior del formulario
+        marginTop: '30px',
+        marginBottom: '30px',
         padding: '20px',
         backgroundColor: '#f9f9f9',
         borderRadius: '8px',
@@ -212,7 +212,7 @@ const styles = {
     input: {
         width: '100%',
         padding: '12px',
-        marginBottom: '15px', // Aumenta el margen entre inputs
+        marginBottom: '15px',
         borderRadius: '6px',
         border: '1px solid #ccc',
         fontSize: '16px',
@@ -226,7 +226,7 @@ const styles = {
         borderRadius: '6px',
         cursor: 'pointer',
         marginRight: '10px',
-        marginTop: '10px', // Aumenta el margen superior para los botones
+        marginTop: '10px',
         fontSize: '16px',
         transition: 'background-color 0.3s',
     },
@@ -237,22 +237,23 @@ const styles = {
         border: 'none',
         borderRadius: '6px',
         cursor: 'pointer',
-        marginTop: '10px', // Aumenta el margen superior para el botón de limpiar
+        marginTop: '10px',
         fontSize: '16px',
         transition: 'background-color 0.3s',
     },
     experimentsContainer: {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-        gap: '25px', // Aumenta el espacio entre los experimentos
+        gap: '25px',
     },
     experimentCard: {
-        backgroundColor: '#fff',
-        padding: '15px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         border: '1px solid #ddd',
-        transition: 'transform 0.3s',
+        borderRadius: '8px',
+        padding: '20px',
+        marginBottom: '20px',
+        backgroundColor: '#fff',
+        color: '#2c3e50',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     },
     buttonDelete: {
         padding: '8px 12px',
@@ -273,7 +274,7 @@ const styles = {
         border: 'none',
         borderRadius: '6px',
         cursor: 'pointer',
-        marginTop: '10px', // Agrega margen superior al botón de procesar
+        marginTop: '10px',
         fontSize: '14px',
         transition: 'background-color 0.3s',
     },
@@ -281,7 +282,7 @@ const styles = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: '30px', // Aumenta el espacio superior para la paginación
+        marginTop: '30px',
     },
     paginationButton: {
         padding: '10px 20px',
