@@ -118,16 +118,17 @@ const styles = {
         height: '100vh',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         alignItems: 'center',
     },
     modalContent: {
         backgroundColor: '#fff',
-        padding: '20px',
+        padding: '-60px',
         borderRadius: '10px',
         width: '400px',
         boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
         position: 'relative',
+        marginRight: '40px'
     },
     closeButton: {
         position: 'absolute',
