@@ -37,90 +37,111 @@ export default function LoginPage() {
 
     return (
         <div style={styles.container}>
-            <form onSubmit={handleSubmit} style={styles.form}>
-                <h2 style={styles.title}>Login</h2>
+            <div style={styles.formContainer}>
+                <h2 style={styles.title}>Iniciar Sesión</h2>
                 {error && <p style={styles.error}>{error}</p>}
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    style={styles.input}
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    style={styles.input}
-                />
-                <button type="submit" style={styles.button}>
-                    Login
-                </button>
+                <form onSubmit={handleSubmit} style={styles.form}>
+                    <input
+                        type="email"
+                        placeholder="Correo Electrónico"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        style={styles.input}
+                    />
+                    <input
+                        type="password"
+                        placeholder="Contraseña"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        style={styles.input}
+                    />
+                    <button type="submit" style={styles.button}>
+                        Iniciar Sesión
+                    </button>
+                </form>
                 <p style={styles.text}>
-                    ¿No tiene una cuenta?{' '}
+                    ¿No tienes una cuenta?{' '}
                     <span style={styles.link} onClick={() => navigate('/register')}>
-                        Cree una.
+                        Regístrate
                     </span>
                 </p>
-            </form>
+            </div>
         </div>
     );
 }
 
 const styles = {
     container: {
+        minHeight: '100vh',
         display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
-        backgroundColor: '#f0f0f0',
+        justifyContent: 'center',
+        backgroundImage: 'url("https://source.unsplash.com/1600x900/?technology")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
     },
-    form: {
-        backgroundColor: '#fff',
-        padding: '40px',
-        borderRadius: '10px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-        textAlign: 'center',
-        maxWidth: '400px',
+    formContainer: {
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        padding: '40px 30px',
+        borderRadius: '8px',
+        boxShadow: '0 8px 20px rgba(0, 0, 0, 0.2)',
         width: '100%',
+        maxWidth: '400px',
+        textAlign: 'center',
+        backdropFilter: 'blur(5px)',
     },
     title: {
-        fontSize: '24px',
-        marginBottom: '20px',
-        color: '#333',
+        fontSize: '32px',
+        marginBottom: '30px',
+        color: '#2c3e50',
+        fontWeight: 'bold',
+    },
+    form: {
+        display: 'flex',
+        flexDirection: 'column',
     },
     input: {
-        width: '100%',
-        padding: '10px',
+        padding: '12px 15px',
         margin: '10px 0',
         border: '1px solid #ddd',
         borderRadius: '5px',
         fontSize: '16px',
+        outline: 'none',
+        transition: 'border-color 0.3s',
+    },
+    inputFocus: {
+        borderColor: '#3498db',
     },
     button: {
-        width: '100%',
-        padding: '12px',
+        padding: '15px',
+        marginTop: '20px',
         backgroundColor: '#3498db',
-        color: 'white',
+        color: '#fff',
         border: 'none',
         borderRadius: '5px',
+        fontSize: '18px',
         cursor: 'pointer',
-        fontSize: '16px',
+        transition: 'background-color 0.3s',
+    },
+    buttonHover: {
+        backgroundColor: '#2980b9',
     },
     text: {
         marginTop: '20px',
-        color: '#333',
+        color: '#7f8c8d',
     },
     link: {
         color: '#3498db',
         cursor: 'pointer',
-        textDecoration: 'underline',
+        textDecoration: 'none',
+        fontWeight: 'bold',
+        marginLeft: '5px',
     },
     error: {
         color: 'red',
-        marginBottom: '10px',
+        marginBottom: '15px',
     },
 };
