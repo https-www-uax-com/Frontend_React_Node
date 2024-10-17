@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
 import LabManagement from '../../components/LabManagement';
 import ResearcherManagement from '../../components/ResearcherManagement';
 import ExperimentManagement from '../../components/ExperimentManagement';
@@ -6,6 +7,7 @@ import RegisterPage from '../../components/auth/RegisterPageAdmin'; // Página d
 
 function AdminPage() {
     const [showRegisterForm, setShowRegisterForm] = useState(false); // Controla si se muestra el formulario
+    const navigate = useNavigate(); // Inicializamos useNavigate
 
     const handleOpenRegisterForm = () => {
         setShowRegisterForm(true);
@@ -15,14 +17,25 @@ function AdminPage() {
         setShowRegisterForm(false);
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        navigate('/'); // Redirigimos al usuario a la página de inicio de sesión
+    };
+
     return (
         <div style={styles.container}>
             <h1 style={styles.title}>Panel de Administración</h1>
 
-            {/* Botón de registrar usuario */}
-            <button style={styles.registerButton} onClick={handleOpenRegisterForm}>
-                Registrar Cuenta [Administrador - Investigador]
-            </button>
+            {/* Contenedor de botones en la parte superior derecha */}
+            <div style={styles.topRightButtons}>
+                <button style={styles.registerButton} onClick={handleOpenRegisterForm}>
+                    Registrar Cuenta [Administrador - Investigador]
+                </button>
+                <button style={styles.logoutButton} onClick={handleLogout}>
+                    Logout
+                </button>
+            </div>
 
             {/* Modal para el formulario de registro */}
             {showRegisterForm && (
@@ -53,7 +66,7 @@ function AdminPage() {
 
 const styles = {
     container: {
-        backgroundColor: '#2c3e50', // Fondo gris oscuro para la página
+        backgroundColor: '#2c3e50',
         minHeight: '100vh',
         padding: '20px',
         fontFamily: 'Arial, sans-serif',
@@ -61,8 +74,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        gap: '40px',
+        position: 'relative',
     },
     title: {
         fontSize: '36px',
@@ -73,38 +85,49 @@ const styles = {
         borderBottom: '2px solid #8e44ad',
         paddingBottom: '10px',
     },
-    registerButton: {
+    topRightButtons: {
         position: 'absolute',
         top: '20px',
         right: '20px',
-        padding: '10px 20px',
+        display: 'flex',
+        gap: '10px',
+    },
+    registerButton: {
+        padding: '10px 15px',
         backgroundColor: '#3498db',
         color: '#fff',
         border: 'none',
         borderRadius: '5px',
         cursor: 'pointer',
-        fontSize: '16px',
+        fontSize: '14px',
+    },
+    logoutButton: {
+        padding: '10px 20px',
+        backgroundColor: '#e74c3c',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        fontSize: '14px',
     },
     modalOverlay: {
         position: 'fixed',
         top: 0,
         left: 0,
-        width: '100vw', // Mantiene el 100% de ancho de la ventana
-        height: '100vh', // Mantiene el 100% de altura de la ventana
-        backgroundColor: 'transparent', // Fondo transparente
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
         display: 'flex',
-        justifyContent: 'flex-end', // Alinea el modal a la derecha
-        alignItems: 'center', // Centra verticalmente
-        paddingRight: '20px', // Añade un poco de espacio desde el borde derecho
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     modalContent: {
         backgroundColor: '#fff',
-        padding: '-60px', // Reduce el padding
+        padding: '20px',
         borderRadius: '10px',
-        width: '300px', // Reduce el tamaño del modal
+        width: '400px',
         boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)',
         position: 'relative',
-        marginRight: '40px', // Añade un margen adicional para ajustar el modal aún más a la derecha
     },
     closeButton: {
         position: 'absolute',
@@ -126,7 +149,7 @@ const styles = {
         maxWidth: '1200px',
         justifyContent: 'space-between',
         gap: '20px',
-        marginBottom: '40px', // Espacio entre las dos secciones
+        marginBottom: '40px',
     },
     leftSection: {
         flex: 1,

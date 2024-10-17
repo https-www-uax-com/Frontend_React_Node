@@ -1,16 +1,31 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import SampleManagement from '../../components/SampleManagement';
 import ExperimentManagement from '../../components/ExperimentManagement';
+import AuthService from '../../services/authService';
 
 function ResearcherPage() {
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        AuthService.logout();
+        navigate('/');
+    };
+
     return (
         <div style={styles.container}>
             <h1 style={styles.title}>Panel del Investigador</h1>
+
+            <button style={styles.logoutButton} onClick={handleLogout}>
+                Logout
+            </button>
+
             <div style={styles.section}>
-                <SampleManagement />
+                <SampleManagement/>
             </div>
             <div style={styles.section}>
-                <ExperimentManagement />
+                <ExperimentManagement/>
             </div>
         </div>
     );
@@ -46,6 +61,18 @@ const styles = {
         borderRadius: '8px',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         marginBottom: '20px',
+    },
+    logoutButton: {
+        position: 'absolute',
+        top: '20px',
+        right: '20px',
+        padding: '10px 20px',
+        backgroundColor: '#e74c3c',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        fontSize: '16px',
     },
 };
 

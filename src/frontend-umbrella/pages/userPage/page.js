@@ -1,10 +1,26 @@
 import React from 'react';
 import BiologicalDataManagement from '../../components/BiologicalDataManagement';
+import {useNavigate} from "react-router-dom";
+import AuthService from "../../services/authService";
 
 function UserPage() {
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        AuthService.logout();
+        navigate('/');
+    };
+
+
     return (
         <div style={styles.container}>
             <h1 style={styles.title}>Panel del Usuario</h1>
+
+            <button style={styles.logoutButton} onClick={handleLogout}>
+                Logout
+            </button>
+
             <div style={styles.section}>
                 <BiologicalDataManagement/>
             </div>
@@ -41,6 +57,18 @@ const styles = {
         borderRadius: '8px',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         marginBottom: '20px',
+    },
+    logoutButton: {
+        position: 'absolute',
+        top: '20px',
+        right: '20px',
+        padding: '10px 20px',
+        backgroundColor: '#e74c3c',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+        fontSize: '16px',
     },
 };
 
